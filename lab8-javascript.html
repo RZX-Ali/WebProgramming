@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Button</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            transition: background-color 0.3s ease;
+        }
+        button {
+            font-size: 20px;
+            padding: 15px 30px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .stats {
+            margin: 20px;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        .fun-fact {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e7f3ff;
+            border-radius: 5px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to My Page</h1>
+    
+    <div class="stats">
+        <p id="clickCounter">Total Clicks: 0</p>
+        <p id="lastClick">Last clicked: Never</p>
+    </div>
+    <br>
+    
+    <button id="nameButton">Click Me!</button>
+    <button id="moodButton">How are you feeling?</button>
+
+    <div id="funFact" class="fun-fact"></div>
+
+    <script>
+        document.write('<p>Created by: Ali Sahi :) </p>');
+
+        const button = document.getElementById("nameButton");
+        const moodButton = document.getElementById("moodButton");
+        const funFact = document.getElementById("funFact");
+        let clickCount = 0;
+        const clickCounter = document.getElementById('clickCounter');
+        const lastClick = document.getElementById('lastClick');
+        const funFacts = [
+            "Honey never spoils!",
+            "Octopuses have three hearts.",
+            "A day on Venus is longer than a year on Venus.",
+            "Bananas are berries, but strawberries aren't.",
+            "The shortest war in history was 38 minutes long."
+        ];
+
+        function updateCounter() {
+            clickCount++;
+            clickCounter.textContent = `Total Clicks: ${clickCount}`;
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            lastClick.textContent = `Last clicked: ${timeString}`;
+            if (clickCount % 3 === 0) {
+                document.querySelector('.stats').style.backgroundColor = 
+                    ['#e8f5e8', '#e8f0f8', '#f8f8e8'][Math.floor(Math.random() * 3)];
+            }
+        
+            if (clickCount % 5 === 0) {
+                const randomFact = funFacts[Math.floor(Math.random() * funFacts.length)];
+                funFact.textContent = `Fun Fact: ${randomFact}`;
+                setTimeout(() => {
+                    funFact.textContent = '';
+                }, 5000);
+            }
+        }
+
+        button.addEventListener("click", () => {
+            updateCounter();
+        
+            const originalColor = button.style.backgroundColor;
+            button.style.backgroundColor = '#2196F3';
+            setTimeout(() => {
+                button.style.backgroundColor = originalColor;
+            }, 300);
+            
+            const user = prompt("What is your name?");
+            if (user) {
+                button.textContent = `Hello, ${user}!`;
+                // I saw this here: https://www.geeksforgeeks.org/html/how-to-make-gradient-button-in-html/
+                button.style.background = 'linear-gradient(135deg, #4CAF50, #45a049)';
+            } else {
+                button.textContent = "Click Me!";
+                button.style.background = '#4CAF50';
+            }
+        });
+        moodButton.addEventListener("click", () => {
+            updateCounter();
+            // I am hoping that the user will input one of these moods below or else it might not work as intended
+            const moods = ["happy", "tired", "excited", "curious", "peaceful"];
+            const randomMood = moods[Math.floor(Math.random() * moods.length)];
+            const response = prompt(`I'm feeling ${randomMood}. How are you feeling?`);
+            
+            if (response) {
+                moodButton.textContent = `Feeling: ${response}`;
+                document.body.style.backgroundColor = 
+                    response.toLowerCase().includes('happy') ? '#f0fff0' :
+                    response.toLowerCase().includes('tired') ? '#f0f8ff' :
+                    response.toLowerCase().includes('excited') ? '#fff0f5' : '#fffacd';
+            }
+        });
+
+        // Tried to make it include your keyboard too especially if user wanted to use it
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                button.click();
+            }
+            if (e.key === 'm') {
+                moodButton.click();
+            }
+        });
+    </script>
+</body>
+</html>
